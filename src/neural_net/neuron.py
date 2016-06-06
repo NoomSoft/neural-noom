@@ -1,11 +1,10 @@
 import logging
-import uuid
 import numpy
 
 DEFAULT_WEIGHT = 0.5
 class Neuron(object):
-    def __init__(self):
-        self.node_id = uuid.uuid4()
+    def __init__(self, id):
+        self.node_id = id
         self.input_weights = {}
         self.input_neurons = []
         self.output_neurons = []
@@ -26,15 +25,16 @@ class Neuron(object):
         self.output_neurons.extend([neuron])
 
     def do_activation(self):
-        sigma = 0
-        for input_neuron in self.input_neurons:
-            sigma += input_neuron.get_output_value()
+        sigma = self.calculate_sigma_of_inputs()
 
         self.output_value = self.activation_function(sigma)
         logging.info("Result of activation : {0}".format(self.output_value))
 
+    def calculate_sigma_of_inputs(self):
+        return sum([input_neuron.get_output_value() for input_neuron in self.input_neurons])
+
     def activation_function(self, sigma):
-        logging.debug("Activation of {0} being calulated".format(sigma))
+        logging.debug("Activation of {0} being calculated".format(sigma))
         return 1 / (1 + numpy.exp(-sigma))
 
     def get_node_id(self):

@@ -1,6 +1,7 @@
 import logging
 from neuron import Neuron
 from layer import Layer
+import uuid
 
 class NeuralNetError(Exception):
     def __init__(self, message):
@@ -17,7 +18,7 @@ class NeuralNet(object):
     def create_layer(self, layer_size):
         new_layer = []
         for i in range(0, layer_size):
-            new_neuron = Neuron()
+            new_neuron = Neuron(uuid.uuid4())
             new_layer.append(new_neuron)
         return Layer(new_layer)
 
