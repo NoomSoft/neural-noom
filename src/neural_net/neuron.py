@@ -1,5 +1,6 @@
 import logging
 import numpy
+from neural_net_error import NeuralNetError
 
 DEFAULT_WEIGHT = 0.5
 class Neuron(object):
@@ -31,7 +32,13 @@ class Neuron(object):
         logging.info("Result of activation : {0}".format(self.output_value))
 
     def calculate_sigma_of_inputs(self):
-        return sum([input_neuron.get_output_value() for input_neuron in self.input_neurons])
+        return sum([
+            self.get_weight_adjusted_input(input_neuron)
+            for input_neuron in self.input_neurons
+        ])
+
+    def get_weight_adjusted_input(self, neuron):
+        return (neuron.get_output_value() * self.input_weights[neuron.get_node_id()])
 
     def activation_function(self, sigma):
         logging.debug("Activation of {0} being calculated".format(sigma))
@@ -45,3 +52,12 @@ class Neuron(object):
 
     def get_output_value(self):
         return self.output_value
+
+    def set_input_weight(self, node_id, new_input_weight):
+        if node_id in self.input_weights:
+            self.input_weights[node_id] = new_input_weight
+        else:
+            raise NeuralNetError("ABORT: Unable to add input weight - node does not exist.")
+
+    def get_input_weight(self, node_id):
+        return self.input_weights.get(node_id)

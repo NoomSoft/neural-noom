@@ -3,10 +3,6 @@ from neuron import Neuron
 from layer import Layer
 import uuid
 
-class NeuralNetError(Exception):
-    def __init__(self, message):
-        super(ValidationError, self).__init__(message)
-
 class NeuralNet(object):
     def __init__(self, depth = 3):
         self.depth = depth
